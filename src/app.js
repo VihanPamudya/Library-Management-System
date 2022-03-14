@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import logger from "./utils/logger";
 import 'dotenv/config';
 
 const app = express();
@@ -14,5 +15,5 @@ app.get('/',(req,res,next)=>{
 })
 
 app.listen(PORT, ()=>{
-    console.log(`Server is running on PORT ${PORT}`)
+    logger.info(`Server is running on PORT ${PORT}`)
 })
