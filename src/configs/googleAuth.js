@@ -5,6 +5,7 @@ import logger from "../utils/logger";
 const googleAuth = (passport) => {
   GoogleStrategy.Strategy;
 
+
   passport.use(
     new GoogleStrategy(
       {
@@ -12,7 +13,7 @@ const googleAuth = (passport) => {
         clientSecret: config.GOOGLE_CLIENT_SECRET,
         callbackURL: config.GOOGLE_REDIRECT_URL,
       },
-      (accessToken, refreshToken, profile, cb) => {
+      (accessToken, refreshToken, profile, callback) => {
         console.log(profile);
         return callback(null, profile);
       }
@@ -21,6 +22,7 @@ const googleAuth = (passport) => {
 
   passport.serializeUser((user, callback) => {
     callback(null, user.id);
+    console.log(callback)
   });
 
   passport.deserializeUser((id, callback) => {
