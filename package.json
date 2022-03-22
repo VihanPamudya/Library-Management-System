@@ -22,6 +22,7 @@
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "mongoose": "^6.2.7",
+    "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
     "password": "^0.1.1",
     "pino": "^7.8.1",
