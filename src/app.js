@@ -13,11 +13,20 @@ const PORT = process.env.PORT || "8090";
 
 app.use(cors());
 app.use(express.json({ limit: "20mb" }));
-app.use(session({
-  
-}))
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(
+  session({
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      expires: new Date(Date.now() + 10000),
+      maxAge: 10000
+    }
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res, next) => {
   res.send("<h2>Library Mnagement System</h2>");
