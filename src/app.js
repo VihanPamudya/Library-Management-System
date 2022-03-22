@@ -4,6 +4,7 @@ import passport from "passport";
 import session from "express-session";
 import config from "./configs";
 import logger from "./utils/logger";
+import MongoStore from "connect-mongo";
 import connect from "./utils/databaseConnection";
 import "dotenv/config";
 import { googleAuth } from "./configs/googleAuth";
@@ -19,6 +20,7 @@ app.use(
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: config.DB_CONNECTION_STRING}),
     cookie: {
       secure: false,
       expires: new Date(Date.now() + 10000),

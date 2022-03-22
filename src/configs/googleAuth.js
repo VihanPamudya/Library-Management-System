@@ -1,10 +1,9 @@
 import GoogleStrategy from "passport-google-oauth20";
 import config from ".";
-import logger from "../utils/logger";
+import User from "../api/model/userModal";
 
 const googleAuth = (passport) => {
   GoogleStrategy.Strategy;
-
 
   passport.use(
     new GoogleStrategy(
@@ -13,20 +12,40 @@ const googleAuth = (passport) => {
         clientSecret: config.GOOGLE_CLIENT_SECRET,
         callbackURL: config.GOOGLE_REDIRECT_URL,
       },
-      (accessToken, refreshToken, profile, callback) => {
-        console.log(profile);
-        return callback(null, profile);
+      async (accessToken, refreshToken, profile, callback) => {
+        const userObject = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          gmail: profile.emails[0].value,
+          image: profile.photos[0].value,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+        };
+        let user = await User.findOne({ googleId: profile.id });
+        if (user) {
+          return callback(null, profile);
+        }
+
+        User.create(userObject)
+          .then((user) => {
+            return callback(null, user);
+          })
+          .catch((err) => {
+            return callback(err.message);
+          });
       }
     )
   );
 
   passport.serializeUser((user, callback) => {
     callback(null, user.id);
-    console.log(callback)
+    console.log(callback);
   });
 
   passport.deserializeUser((id, callback) => {
-    callback(err, id);
+    User.findById(id, (err, user) => {
+      callback(err, user);
+    });
   });
 };
 
